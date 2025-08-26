@@ -39,11 +39,14 @@ use crate::{
     Keymap, Keystroke, LayoutId, Menu, MenuItem, OwnedMenu, PathPromptOptions, Pixels, Platform,
     PlatformDisplay, PlatformKeyboardLayout, Point, PromptBuilder, PromptButton, PromptHandle,
     PromptLevel, Render, RenderImage, RenderablePromptHandle, Reservation, ScreenCaptureSource,
-    SubscriberSet, Subscription, SvgRenderer, Task, TextSystem, WaylandClient, Window,
+    SubscriberSet, Subscription, SvgRenderer, Task, TextSystem, Window,
     WindowAppearance, WindowHandle, WindowId, WindowInvalidator,
     colors::{Colors, GlobalColors},
     current_platform, hash, init_app_menus,
 };
+
+#[cfg(target_os="linux")]
+use crate::WaylandClient;
 
 mod async_context;
 mod context;
