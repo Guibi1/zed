@@ -53,6 +53,7 @@ pub(crate) struct WindowsPlatformState {
     callbacks: PlatformCallbacks,
     menus: Vec<OwnedMenu>,
     jump_list: JumpList,
+    quit_when_last_window_closes: bool,
     // NOTE: standard cursor handles don't need to close.
     pub(crate) current_cursor: Option<HCURSOR>,
 }
@@ -79,6 +80,7 @@ impl WindowsPlatformState {
             jump_list,
             current_cursor,
             menus: Vec::new(),
+            quit_when_last_window_closes: true,
         }
     }
 }
@@ -168,6 +170,24 @@ impl WindowsPlatform {
             .for_each(|handle| unsafe {
                 PostMessageW(Some(handle.as_raw()), message, wparam, lparam).log_err();
             });
+    }
+
+    fn close_one_window(&self, target_window: HWND) -> bool {
+        let mut lock = self.raw_window_handles.write();
+        let index = lock
+            .iter()
+            .position(|handle| handle.as_raw() == target_window)
+            .unwrap();
+        lock.remove(index);
+
+        self.state.borrow().quit_when_last_window_closes && lock.is_empty()
+    }
+
+    #[inline]
+    fn run_foreground_task(&self) {
+        for runnable in self.main_receiver.drain() {
+            runnable.run();
+        }
     }
 
     fn generate_creation_info(&self) -> WindowCreationInfo {
@@ -279,6 +299,10 @@ impl Platform for WindowsPlatform {
             .borrow_mut()
             .callbacks
             .keyboard_layout_change = Some(callback);
+    }
+
+    fn set_quit_when_last_window_closes(&self, should_quit: bool) {
+        self.state.borrow_mut().quit_when_last_window_closes = should_quit;
     }
 
     fn run(&self, on_finish_launching: Box<dyn 'static + FnOnce()>) {
