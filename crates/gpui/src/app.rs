@@ -34,7 +34,6 @@ use util::{ResultExt, debug_panic};
 
 #[cfg(any(feature = "inspector", debug_assertions))]
 use crate::InspectorElementRegistry;
-use crate::colors::{Colors, GlobalColors};
 use crate::{
     Action, ActionBuildError, ActionRegistry, Any, AnyView, AnyWindowHandle, AppContext, Asset,
     AssetSource, BackgroundExecutor, Bounds, ClipboardItem, CursorStyle, DispatchPhase, DisplayId,
@@ -43,7 +42,7 @@ use crate::{
     PlatformDisplay, PlatformKeyboardLayout, Point, PromptBuilder, PromptButton, PromptHandle,
     PromptLevel, Render, RenderImage, RenderablePromptHandle, Reservation, ScreenCaptureSource,
     SharedString, SubscriberSet, Subscription, SvgRenderer, Task, TextSystem, Window,
-    WindowAppearance, WindowHandle, WindowId, WindowInvalidator,
+    WindowAppearance, WindowHandle, WindowId, WindowInvalidator, PlatformKeyboardMapper,
     colors::{Colors, GlobalColors},
     current_platform, hash, init_app_menus,
 };
