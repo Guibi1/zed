@@ -876,7 +876,8 @@ impl Platform for MacPlatform {
 
     fn set_quit_when_last_window_closes(&self, should_quit: bool) {
         self.0.lock().quit_when_last_window_closes = should_quit;
-        unimplemented!("quit_when_last_window_closes is not implemented on macOS yet");
+        // TODO: Implement quit_when_last_window_closes on macOS and remove this warning
+        println!("WARNING: quit_when_last_window_closes is not implemented on macOS yet");
     }
 
     fn on_app_menu_action(&self, callback: Box<dyn FnMut(&dyn Action)>) {
