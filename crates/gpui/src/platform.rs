@@ -83,6 +83,9 @@ pub(crate) use test::*;
 #[cfg(target_os = "windows")]
 pub(crate) use windows::*;
 
+#[cfg(all(target_os = "linux", feature = "wayland"))]
+pub use linux::layer_shell;
+
 #[cfg(any(test, feature = "test-support"))]
 pub use test::{TestDispatcher, TestScreenCaptureSource, TestScreenCaptureStream};
 
@@ -1264,6 +1267,11 @@ pub enum WindowKind {
     /// A window that appears above all other windows, usually used for alerts or popups
     /// use sparingly!
     PopUp,
+
+    /// A Wayland LayerShell window, used to draw overlays or backgrounds for applications such as
+    /// docks, notifications or wallpapers.
+    #[cfg(all(target_os = "linux", feature = "wayland"))]
+    LayerShell(layer_shell::LayerShellOptions),
 }
 
 /// The appearance of the window, as defined by the operating system.
