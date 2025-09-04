@@ -1099,31 +1099,6 @@ impl Dispatch<zwlr_layer_surface_v1::ZwlrLayerSurfaceV1, ObjectId> for WaylandCl
     }
 }
 
-impl Dispatch<zwlr_layer_surface_v1::ZwlrLayerSurfaceV1, ObjectId> for WaylandClientStatePtr {
-    fn event(
-        this: &mut Self,
-        _: &zwlr_layer_surface_v1::ZwlrLayerSurfaceV1,
-        event: <zwlr_layer_surface_v1::ZwlrLayerSurfaceV1 as Proxy>::Event,
-        surface_id: &ObjectId,
-        _: &Connection,
-        _: &QueueHandle<Self>,
-    ) {
-        let client = this.get_client();
-        let mut state = client.borrow_mut();
-        let Some(window) = get_window(&mut state, surface_id) else {
-            return;
-        };
-
-        drop(state);
-        let should_close = window.handle_layersurface_event(event);
-
-        if should_close {
-            // The close logic will be handled in drop_window()
-            window.close();
-        }
-    }
-}
-
 impl Dispatch<xdg_wm_base::XdgWmBase, ()> for WaylandClientStatePtr {
     fn event(
         _: &mut Self,

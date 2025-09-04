@@ -1259,7 +1259,7 @@ pub struct TitlebarOptions {
 }
 
 /// The kind of window to create
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum WindowKind {
     /// A normal application window
     Normal,
